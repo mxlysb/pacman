@@ -243,8 +243,8 @@ map.forEach((row, i) => {
                 case '.':
                     pellets.push(new Pellet({
                         position: {
-                                x: j * Boundary.width,
-                                y: i * Boundary.height
+                                x: j * Boundary.width + Boundary.width / 2,
+                                y: i * Boundary.height + Boundary.height / 2
                         },
                         image: createImage('./img/pipeConnectorTop.png')
                     }))
@@ -341,9 +341,15 @@ function animate() {
         }
     }
 
-    pellets.forEach(pellet => {
+    for (let i = pellets.length - 1; 0 < i; i-- ) {
+        const pellet = pellets[i]
         pellet.draw();
-    })
+
+        if(Math.hypot(pellet.position.x - player.position.x,
+            pellet.position.y - player.position.y) < pellet.radius + player.radius) {
+                pellets.splice(i, 1)
+        }
+    }
 
     boundaries.forEach(boundary => {
         boundary.draw();
